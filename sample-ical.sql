@@ -14,6 +14,7 @@ BEGIN
     , p_uid             => rawtohex(sys_guid()) || '@example.com' --this is just a long uniqueish string
     , p_description     => 'This the text that appears in the meeting notes'
     , p_location        => 'Wellington, New Zealand'
+    , p_mail_serv       => 'mail.example.com'
    );
  
    schemaapexcmmn.brw_send_ical_email( 
