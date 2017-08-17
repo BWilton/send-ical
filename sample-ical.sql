@@ -5,8 +5,8 @@ DECLARE
 BEGIN
  
    l_ical_event := ical_event(
-      p_start_date      => TO_DATE(:P301_START_DATE, 'DD-MON-YYYY HH24:MI')
-    , p_end_date        => TO_DATE(:P301_END_DATE ,'DD-MON-YYYY HH24:MI')
+      p_start_date      => trunc(sysdate+2/24,'HH24')
+    , p_end_date        => trunc(sysdate+3/24,'HH24')
     , p_summary         => 'Test meeting summary'
     , p_organizer_name  => 'Ben Wilton'
     , p_organizer_email => 'ben@example.com'
@@ -14,7 +14,6 @@ BEGIN
     , p_uid             => rawtohex(sys_guid()) || '@example.com' --this is just a long uniqueish string
     , p_description     => 'This the text that appears in the meeting notes'
     , p_location        => 'Wellington, New Zealand'
-    , p_mail_serv       => 'mail.example.com'
    );
  
    schemaapexcmmn.brw_send_ical_email( 
@@ -23,6 +22,7 @@ BEGIN
     , p_subj      => 'Test meeting summary'
     , p_body_html => 'This the text that appears in the email'
     , p_body_ical => l_ical_event
+    , p_mail_serv => 'mail.example.com'
    );
     
 END;
