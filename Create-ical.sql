@@ -130,7 +130,6 @@ BEGIN
       || p_body_ical || l_lf
       || l_lf
       || '------_=_NextPart--';
-   p_body := l_msg_body;         
    --Open connection to smtp server
    l_connection := utl_smtp.open_connection(p_mail_serv);
    --Pass in the domain of the sender this is normally the same as the smtp server
