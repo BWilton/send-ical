@@ -16,7 +16,7 @@ BEGIN
     , p_location        => 'Wellington, New Zealand'
    );
  
-   schemaapexcmmn.brw_send_ical_email( 
+   send_ical_email( 
       p_to        => 'someone.else@example.com'
     , p_from      => 'ben@example.com'
     , p_subj      => 'Test meeting summary'
