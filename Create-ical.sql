@@ -103,7 +103,6 @@ BEGIN
       || 'Content-Type: multipart/alternative;' || l_lf
       || ' boundary="----_=_NextPart"' || l_lf
       || 'Subject: ' || p_subj || l_lf 
-      || 'Date: ' || to_char(SYSDATE,'DAY, DD-MON-RR HH24:MI') || l_lf
       || 'From: <' || p_from || '> ' || l_lf 
       || 'To: ' || p_to || l_lf 
       || '------_=_NextPart' || l_lf
