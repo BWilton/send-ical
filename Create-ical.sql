@@ -37,11 +37,37 @@ BEGIN
       || 'PRODID:' || nvl(p_prodid,'-//Company Id//NONSGML ICAL_EVENT//EN') || l_lf
       || 'CALSCALE:' || nvl(p_calscale,'GREGORIAN') || l_lf
       || 'METHOD:' || nvl(p_method,'REQUEST') || l_lf
+      
+      /* Time zone example
+      || 'BEGIN:VTIMEZONE' || l_lf
+	    || 'TZID:Pacific/Auckland' || l_lf
+	    || 'BEGIN:STANDARD' || l_lf
+	    || 'DTSTART:20070430T000000' || l_lf
+	    || 'RRULE:FREQ=YEARLY;INTERVAL=1;BYMONTH=4;BYDAY=1SU' || l_lf
+	    || 'TZOFFSETFROM:+1300' || l_lf
+	    || 'TZOFFSETTO:+1200' || l_lf
+	    || 'TZNAME:NZST' || l_lf
+	    || 'END:STANDARD' || l_lf
+	    || 'BEGIN:DAYLIGHT' || l_lf
+	    || 'DTSTART:20070930T020000' || l_lf 
+	    || 'RRULE:FREQ=YEARLY;INTERVAL=1;BYMONTH=9;BYDAY=-1SU' || l_lf
+	    || 'TZOFFSETFROM:+1200' || l_lf
+	    || 'TZOFFSETTO:+1300' || l_lf
+	    || 'TZNAME:NZDT' || l_lf
+	    || 'END:DAYLIGHT' || l_lf
+	    || 'END:VTIMEZONE' || l_lf
+      */
+      
       || 'BEGIN:VEVENT' || l_lf
       || 'LOCATION:' || p_location || l_lf
       || 'SUMMARY:' || p_summary || l_lf
       || 'DESCRIPTION:' ||REPLACE(REPLACE(REPLACE( p_description,'<br>','\n'),chr(10),'\n'),chr(13),'\n') || l_lf--strip out linefeeds
       || 'ORGANIZER;CN="' || p_organizer_name || '":MAILTO:' || p_organizer_email || l_lf
+      /* When using timezone 
+      || 'DTSTART;TZID=Pacific/Auckland:' || to_char(p_start_date,'YYYYMMDD') || 'T' || to_char(p_start_date,'HH24MISS') || l_lf
+      || 'DTEND;TZID=Pacific/Auckland:'   || to_char(p_end_date,'YYYYMMDD') || 'T' || to_char(p_end_date,'HH24MISS') || l_lf
+      || 'DTSTAMP;TZID=Pacific/Auckland:' || to_char(SYSDATE,'YYYYMMDD') || 'T' || to_char(SYSDATE,'HH24MISS') || l_lf
+      */
       || 'DTSTART:' || to_char(p_start_date,'YYYYMMDD') || 'T' || to_char(p_start_date,'HH24MISS') || l_lf
       || 'DTEND:' || to_char(p_end_date,'YYYYMMDD') || 'T' || to_char(p_end_date,'HH24MISS') || l_lf
       || 'RESOURCES:Mobile AVL' || l_lf
