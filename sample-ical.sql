@@ -23,6 +23,7 @@ BEGIN
     , p_body_html => 'This the text that appears in the email'
     , p_body_ical => l_ical_event
     , p_mail_serv => 'mail.example.com'
+	   , p_method    => 'REQUEST'
    );
     
 END;
