@@ -12,15 +12,15 @@ this ical_event will need to be embeded in an email
 , p_location        IN VARCHAR2 := NULL
 , p_description     IN VARCHAR2 := NULL
 , p_uid             IN VARCHAR2 := NULL
-, p_trigger         IN VARCHAR2 := NULL  --(Code defaults to 60 minute warning 60M = 60 minutes before event)
-, p_version         IN VARCHAR2 := NULL  --(Code defaults it to 2.0 if null)
-, p_prodid          IN VARCHAR2 := NULL  --(Code defaults it to '-//Company Name//NONSGML ICAL_EVENT//EN' if null)
-, p_calscale        IN VARCHAR2 := NULL  --(Code defaults it to GREGORIAN if null)
+, p_trigger         IN VARCHAR2 := NULL   --(Code defaults to 60 minute warning 60M = 60 minutes before event)
+, p_version         IN VARCHAR2 := NULL   --(Code defaults it to 2.0 if null)
+, p_prodid          IN VARCHAR2 := NULL   --(Code defaults it to '-//Company Name//NONSGML ICAL_EVENT//EN' if null)
+, p_calscale        IN VARCHAR2 := NULL   --(Code defaults it to GREGORIAN if null)
 , p_method          IN VARCHAR2 := NULL   --(Code defaults it to REQUEST if null) REQUEST or CANCEL are valid options
 , p_recurrence      IN VARCHAR2 := 'N'    -- N= not a recurring event i.e. single event
 , p_frequency       IN VARCHAR2 := NULL   -- DAILY,WEEKLY,MONTHLY,YEARLY bewteen events
 , p_interval        IN NUMBER   := NULL   --the number of day, weeks or months between events
-, p_count           IN NUMBER   := NULL)   --the number of occurrances 
+, p_count           IN NUMBER   := NULL)  --the number of occurrances 
 
    RETURN VARCHAR2   
 
@@ -61,9 +61,9 @@ BEGIN
       || 'BEGIN:VEVENT' || l_lf
       || 'LOCATION:' || p_location || l_lf
       || 'SUMMARY:' || p_summary || l_lf
-      || 'DESCRIPTION:' ||REPLACE(REPLACE(REPLACE( p_description,'<br>','\n'),chr(10),'\n'),chr(13),'\n') || l_lf--strip out linefeeds
+      || 'DESCRIPTION:' ||REPLACE(REPLACE(REPLACE( p_description,'<br>','\n'),chr(10),'\n'),chr(13),'\n') || l_lf--strip out linefeeds from the description
       || 'ORGANIZER;CN="' || p_organizer_name || '":MAILTO:' || p_organizer_email || l_lf
-      /* When using timezone 
+      /* When using timezone --Strongly recommend using timezones to prevent issues with Exchange 2016
       || 'DTSTART;TZID=Pacific/Auckland:' || to_char(p_start_date,'YYYYMMDD') || 'T' || to_char(p_start_date,'HH24MISS') || l_lf
       || 'DTEND;TZID=Pacific/Auckland:'   || to_char(p_end_date,'YYYYMMDD') || 'T' || to_char(p_end_date,'HH24MISS') || l_lf
       || 'DTSTAMP;TZID=Pacific/Auckland:' || to_char(SYSDATE,'YYYYMMDD') || 'T' || to_char(SYSDATE,'HH24MISS') || l_lf
@@ -113,12 +113,13 @@ the Corrections smtp server address is hard coded into this procedure
  , p_body_ical IN VARCHAR2
  , p_mail_serv IN VARCHAR2
  , p_mail_port IN VARCHAR2 := '25'
+ , p_method    IN VARCHAR2 := 'REQUEST'--REQUEST = new appointment, CANCEL = Meeting Cancellation
 )
   
 AS
  
    l_connection utl_smtp.connection;
-   l_lf         CHAR(1) := chr(10);
+   l_lf         CHAR(2) := chr(13)||chr(10);   --Chr(13) is the Carriage Return and Chr(10) is the Line Feed character
    l_msg_body   VARCHAR2(32767);
   
 BEGIN
@@ -148,7 +149,7 @@ BEGIN
       || '------_=_NextPart' || l_lf
       || 'Content-class: urn:content-classes:calendarmessage' || l_lf
       || 'Content-Type: text/calendar;' || l_lf
-      || '  method=REQUEST;' || l_lf
+      || '  method='||p_method||';' || l_lf
       || '  name="meeting.ics"' || l_lf
       || 'Content-Transfer-Encoding: 8bit' || l_lf
       || l_lf
